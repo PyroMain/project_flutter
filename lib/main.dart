@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:project_flutter/panier.dart';
 import 'package:project_flutter/screens/homme/views/home_screen.dart';
-
 import 'database/database_service.dart';
 import 'database/userDB.dart';
 import 'model/user.dart';
@@ -21,6 +21,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       //home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      //home: const PizzaCartApp(),
       home: HomeScreen(),
     );
   }
