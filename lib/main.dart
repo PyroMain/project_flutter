@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:project_flutter/screens/homme/views/home_screen.dart';
 
+import 'database/database_service.dart';
+import 'database/userDB.dart';
+import 'model/user.dart';
+
 void main() {
   runApp(const MyApp());
 }
