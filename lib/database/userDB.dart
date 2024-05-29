@@ -2,7 +2,7 @@ import 'package:sqflite/sqflite.dart';
 import 'package:project_flutter/database/database_service.dart';
 import 'package:project_flutter/model/user.dart';
 
-class DB {
+class UserDB {
   final tableName = 'user';
 
   Future<void> createTable(Database database) async {

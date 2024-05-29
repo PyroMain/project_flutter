@@ -1,6 +1,6 @@
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
-import 'db.dart';
+import 'userDB.dart';
 
 class DatabaseService {
   Database? _database;
@@ -33,5 +33,5 @@ class DatabaseService {
     return database;
   }
 
-  Future<void> create(Database database, int version) async => await DB().createTable(database);
+  Future<void> create(Database database, int version) async => await UserDB().createTable(database);
 }

@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:project_flutter/database/database_service.dart';
+import 'package:sqflite_common/sqlite_api.dart';
+
+import 'database/userDB.dart';
+import 'model/user.dart';
 
 void main() {
   runApp(const MyApp());
@@ -29,7 +34,23 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  final DatabaseService databaseService = DatabaseService();
+  Future<List<User>>? futureUsers;
+  final userDB = UserDB();
   int _counter = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    
+    fetchUsers();
+  }
+
+  void fetchUsers() {
+    setState(() {
+      futureUsers = userDB.fetchAll();
+    });
+  }
 
   void _incrementCounter() {
     setState(() {
@@ -39,12 +60,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
@@ -55,7 +70,7 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             const Text(
-              'Ceci est un test',
+              "",
             ),
             Text(
               '$_counter',
