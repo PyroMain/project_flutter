@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:project_flutter/database/database_service.dart';
-import 'package:sqflite_common/sqlite_api.dart';
-
-import 'database/userDB.dart';
-import 'model/user.dart';
+import 'package:project_flutter/screens/homme/views/home_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -20,7 +16,8 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'Accueil'),
+      //home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: HomeScreen(),
     );
   }
 }
@@ -42,7 +39,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
-    
+
     fetchUsers();
   }
 
