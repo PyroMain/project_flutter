@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'pizza_grid.dart';
+import 'package:project_flutter/widgets/search_bar.dart';
+import '../widgets/pizza_grid.dart';
+import 'cart.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -17,6 +19,9 @@ class _HomeScreenState extends State<HomeScreen> {
     {'name': 'Pizza 4', 'image': 'assets/35-pizza-png-image.png', 'price': '9€', 'description': 'Classic Margherita pizza with a tangy tomato base.'},
     {'name': 'Pizza 5', 'image': 'assets/35-pizza-png-image.png', 'price': '13€', 'description': 'Four cheese pizza with a rich blend of flavors.'},
     {'name': 'Pizza 6', 'image': 'assets/35-pizza-png-image.png', 'price': '10€', 'description': 'Pepperoni pizza with a crispy crust.'},
+    {'name': 'Pizza 7', 'image': 'assets/35-pizza-png-image.png', 'price': '9€', 'description': 'Classic Margherita pizza with a tangy tomato base.'},
+    {'name': 'Pizza 8', 'image': 'assets/35-pizza-png-image.png', 'price': '13€', 'description': 'Four cheese pizza with a rich blend of flavors.'},
+    {'name': 'Pizza 9', 'image': 'assets/35-pizza-png-image.png', 'price': '10€', 'description': 'Pepperoni pizza with a crispy crust.'},
   ];
 
   String query = '';
@@ -33,27 +38,45 @@ class _HomeScreenState extends State<HomeScreen> {
         backgroundColor: Colors.green,
         title: Row(
           children: [
-            Image.asset('assets/35-pizza-png-image.png', scale: 14),
+            Image.asset('assets/pizza.png', scale: 20),
             const SizedBox(width: 8),
             const Text(
               'PIZZA',
-              style: TextStyle(fontWeight: FontWeight.w900, fontSize: 24),
+              style: TextStyle(
+                  fontWeight: FontWeight.w900,
+                  fontSize: 24,
+                  color: Colors.white,
+              ),
             ),
           ],
         ),
         actions: [
-          IconButton(onPressed: () {}, icon: const Icon(CupertinoIcons.cart)),
-          IconButton(onPressed: () {}, icon: const Icon(CupertinoIcons.arrow_right_to_line)),
+          IconButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const CartScreen()),
+                );
+              },
+              icon: const Icon(
+                  CupertinoIcons.cart_fill,
+                  color: Colors.white,
+              )
+          ),
         ],
       ),
       body: Column(
         children: [
-          SearchBar(
-            onChanged: (value) {
-              setState(() {
-                query = value;
-              });
-            },
+          const SizedBox(height: 10),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: CustomSearchBar(
+              onChanged: (value) {
+                setState(() {
+                  query = value;
+                });
+              },
+            ),
           ),
           Expanded(
             child: PizzaGrid(filteredPizzas: filteredPizzas),

@@ -9,12 +9,12 @@ class PizzaGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(10),
       child: GridView.builder(
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 3,
-          crossAxisSpacing: 3,
-          mainAxisSpacing: 3,
+          crossAxisCount: 2,
+          crossAxisSpacing: 10,
+          mainAxisSpacing: 10,
           childAspectRatio: 2 / 2,
         ),
         itemCount: filteredPizzas.length,
@@ -31,11 +31,11 @@ class PizzaGrid extends StatelessWidget {
                 Image.asset(
                   filteredPizzas[i]['image']!,
                   fit: BoxFit.cover,
-                  height: 200,
+                  height: 100,
                   width: double.infinity,
                 ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 6.0, vertical: 4.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                   child: Row(
                     children: [
                       Container(
@@ -55,14 +55,14 @@ class PizzaGrid extends StatelessWidget {
                           ),
                         ),
                       ),
-                      const SizedBox(width: 6),
+                      const SizedBox(width: 5),
                       Container(
                         decoration: BoxDecoration(
                           color: Colors.green.withOpacity(0.2),
                           borderRadius: BorderRadius.circular(15),
                         ),
                         child: const Padding(
-                          padding: EdgeInsets.symmetric(vertical: 2, horizontal: 6),
+                          padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
                           child: Text(
                             "🌶️ BALANCE",
                             style: TextStyle(
@@ -78,7 +78,7 @@ class PizzaGrid extends StatelessWidget {
                 ),
                 const SizedBox(height: 4),
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 6.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
                   child: Text(
                     filteredPizzas[i]['name']!,
                     style: const TextStyle(
@@ -88,7 +88,7 @@ class PizzaGrid extends StatelessWidget {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 6.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
                   child: Text(
                     filteredPizzas[i]['description']!,
                     style: TextStyle(
