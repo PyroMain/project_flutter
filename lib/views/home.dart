@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:project_flutter/model/pizza_type.dart';
 import 'package:project_flutter/widgets/search_bar.dart';
+import '../database/database_service.dart';
 import '../widgets/pizza_grid.dart';
 import 'cart.dart';
 
@@ -12,24 +14,28 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final List<Map<String, String>> pizzas = [
-    {'name': 'Pizza 1', 'image': 'assets/35-pizza-png-image.png', 'price': '10€', 'description': 'Delicious cheesy pizza with a balance of spice.'},
-    {'name': 'Pizza 2', 'image': 'assets/35-pizza-png-image.png', 'price': '12€', 'description': 'Spicy pizza with extra cheese.'},
-    {'name': 'Pizza 3', 'image': 'assets/35-pizza-png-image.png', 'price': '11€', 'description': 'Vegetarian pizza with fresh vegetables.'},
-    {'name': 'Pizza 4', 'image': 'assets/35-pizza-png-image.png', 'price': '9€', 'description': 'Classic Margherita pizza with a tangy tomato base.'},
-    {'name': 'Pizza 5', 'image': 'assets/35-pizza-png-image.png', 'price': '13€', 'description': 'Four cheese pizza with a rich blend of flavors.'},
-    {'name': 'Pizza 6', 'image': 'assets/35-pizza-png-image.png', 'price': '10€', 'description': 'Pepperoni pizza with a crispy crust.'},
-    {'name': 'Pizza 7', 'image': 'assets/35-pizza-png-image.png', 'price': '9€', 'description': 'Classic Margherita pizza with a tangy tomato base.'},
-    {'name': 'Pizza 8', 'image': 'assets/35-pizza-png-image.png', 'price': '13€', 'description': 'Four cheese pizza with a rich blend of flavors.'},
-    {'name': 'Pizza 9', 'image': 'assets/35-pizza-png-image.png', 'price': '10€', 'description': 'Pepperoni pizza with a crispy crust.'},
-  ];
-
+  List<PizzaType> pizzas = [];
   String query = '';
 
   @override
+  void initState() {
+    super.initState();
+    loadPizzas();
+  }
+
+  Future<void> loadPizzas() async {
+    final dbService = DatabaseService.instance;
+    final loadedPizzas = await dbService.getPizzas();
+
+    setState(() {
+      pizzas = loadedPizzas;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    List<Map<String, String>> filteredPizzas = pizzas.where((pizza) {
-      return pizza['name']!.toLowerCase().contains(query.toLowerCase());
+    List<PizzaType> filteredPizzas = pizzas.where((pizza) {
+      return pizza.name.toLowerCase().contains(query.toLowerCase());
     }).toList();
 
     return Scaffold(

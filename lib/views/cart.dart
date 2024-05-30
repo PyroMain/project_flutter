@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:project_flutter/model/order_line.dart';
+
+import '../database/database_service.dart';
+import '../model/pizza_type.dart';
 
 class CartScreen extends StatefulWidget {
   const CartScreen({super.key});
@@ -8,28 +12,50 @@ class CartScreen extends StatefulWidget {
 }
 
 class _CartScreenState extends State<CartScreen> {
-  List<Map<String, dynamic>> cartItems = [
-    {'name': 'Pizza 1', 'quantity': 1, 'price': 10},
-    {'name': 'Pizza 2', 'quantity': 1, 'price': 10},
-    {'name': 'Pizza 3', 'quantity': 1, 'price': 10},
-  ];
+  List<OrderLine> cartItems = [];
+
+  @override
+  void initState() {
+    super.initState();
+    loadCartItems();
+  }
+
+  Future<void> loadCartItems() async {
+    final dbService = DatabaseService.instance;
+    final loadedCartItems = await dbService.getOrderLines(0);
+
+    for (OrderLine orderLine in loadedCartItems) {
+      orderLine.pizzaType = await dbService.getPizza(orderLine.pizzaTypeId) ?? PizzaType(id: 0,
+          name: 'Pizza',
+          description: '',
+          price: '0',
+          image: '');
+    }
+
+    setState(() {
+      cartItems = loadedCartItems;
+    });
+  }
 
   void _incrementQuantity(int index) {
     setState(() {
-      cartItems[index]['quantity']++;
+      cartItems[index].quantity++;
+      DatabaseService.instance.updateOrderLineQuantity(cartItems[index].id, cartItems[index].quantity);
     });
   }
 
   void _decrementQuantity(int index) {
     setState(() {
-      if (cartItems[index]['quantity'] > 1) {
-        cartItems[index]['quantity']--;
+      if (cartItems[index].quantity > 1) {
+        cartItems[index].quantity--;
+        DatabaseService.instance.updateOrderLineQuantity(cartItems[index].id, cartItems[index].quantity);
       }
     });
   }
 
   void _removeItem(int index) {
     setState(() {
+      DatabaseService.instance.deleteOrderLine(cartItems[index].id);
       cartItems.removeAt(index);
     });
   }
@@ -37,13 +63,14 @@ class _CartScreenState extends State<CartScreen> {
   void _clearCart() {
     setState(() {
       cartItems.clear();
+      DatabaseService.instance.clearTable('orders_line');
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    double totalQuantity = cartItems.fold(0, (sum, item) => sum + item['quantity']);
-    double totalPrice = cartItems.fold(0, (sum, item) => sum + (item['price'] * item['quantity']));
+    double totalQuantity = cartItems.fold(0, (sum, item) => sum + item.quantity);
+    double totalPrice = cartItems.fold(0, (sum, item) => sum + (double.parse(item.pizzaType.price) * item.quantity));
 
     return Scaffold(
       backgroundColor: Colors.grey.shade200,
@@ -113,14 +140,14 @@ class _CartScreenState extends State<CartScreen> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text(cartItems[index]['name']),
+                                Text(cartItems[index].pizzaType.name),
                                 Row(
                                   children: [
                                     IconButton(
                                       icon: const Icon(Icons.remove),
                                       onPressed: () => _decrementQuantity(index),
                                     ),
-                                    Text('${cartItems[index]['quantity']}'),
+                                    Text('${cartItems[index].quantity}'),
                                     IconButton(
                                       icon: const Icon(Icons.add),
                                       onPressed: () => _incrementQuantity(index),

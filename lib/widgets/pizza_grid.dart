@@ -1,8 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:project_flutter/database/database_service.dart';
+
+import '../model/pizza_type.dart';
 
 class PizzaGrid extends StatelessWidget {
-  final List<Map<String, String>> filteredPizzas;
+  final List<PizzaType> filteredPizzas;
 
   const PizzaGrid({required this.filteredPizzas, super.key});
 
@@ -15,7 +18,7 @@ class PizzaGrid extends StatelessWidget {
           crossAxisCount: 2,
           crossAxisSpacing: 10,
           mainAxisSpacing: 10,
-          childAspectRatio: 2 / 2,
+          childAspectRatio: 0.75,
         ),
         itemCount: filteredPizzas.length,
         itemBuilder: (context, int i) {
@@ -23,66 +26,24 @@ class PizzaGrid extends StatelessWidget {
             elevation: 3,
             color: Colors.white,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(10),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Image.asset(
-                  filteredPizzas[i]['image']!,
+                  filteredPizzas[i].image,
                   fit: BoxFit.cover,
-                  height: 100,
+                  height: 125,
                   width: double.infinity,
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                  child: Row(
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(
-                          color: Colors.green,
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        child: const Padding(
-                          padding: EdgeInsets.symmetric(vertical: 2, horizontal: 6),
-                          child: Text(
-                            "VEG",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 10,
-                            ),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 5),
-                      Container(
-                        decoration: BoxDecoration(
-                          color: Colors.green.withOpacity(0.2),
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        child: const Padding(
-                          padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                          child: Text(
-                            "🌶️ BALANCE",
-                            style: TextStyle(
-                              color: Colors.orange,
-                              fontWeight: FontWeight.w800,
-                              fontSize: 10,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
                 ),
                 const SizedBox(height: 4),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 10),
                   child: Text(
-                    filteredPizzas[i]['name']!,
+                    filteredPizzas[i].name,
                     style: const TextStyle(
-                      fontSize: 16,
+                      fontSize: 18,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -90,37 +51,41 @@ class PizzaGrid extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 10),
                   child: Text(
-                    filteredPizzas[i]['description']!,
+                    filteredPizzas[i].description,
                     style: TextStyle(
-                      fontSize: 10,
+                      fontSize: 12,
                       color: Colors.grey.shade500,
                     ),
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 6.0, vertical: 4.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        filteredPizzas[i]['price']!,
+                        '${filteredPizzas[i].price} €',
                         style: TextStyle(
-                          fontSize: 14,
+                          fontSize: 18,
                           color: Theme.of(context).colorScheme.primary,
-                          fontWeight: FontWeight.w700,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
                       Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           IconButton(
                             onPressed: () {},
                             icon: const Icon(CupertinoIcons.info_circle),
-                            iconSize: 18,
+                            iconSize: 30,
                           ),
                           IconButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              DatabaseService.instance.insertOrderLine(0, filteredPizzas[i].id, 1);
+                            },
                             icon: const Icon(CupertinoIcons.add_circled_solid),
-                            iconSize: 18,
+                            iconSize: 30,
+                            color: Colors.green,
                           ),
                         ],
                       ),
